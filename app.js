@@ -2,7 +2,7 @@ import express from "express";
 const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser";
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["https://main--magenta-cascaron-7d14cf.netlify.app"];
 
 app.use(
   cors({
