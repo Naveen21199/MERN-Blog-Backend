@@ -4,6 +4,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 const allowedOrigins = ["https://main--magenta-cascaron-7d14cf.netlify.app"];
 
+app.options("*", cors());
+
 app.use(
   cors({
     origin: function (origin, callback) {
