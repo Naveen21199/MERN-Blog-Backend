@@ -4,19 +4,39 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 const allowedOrigins = ["https://main--magenta-cascaron-7d14cf.netlify.app"];
 
-const corsOptions = {
-  origin: 'https://main--magenta-cascaron-7d14cf.netlify.app',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+app.options('*', cors(corsOptions));
+// const corsOptions = {
+//   origin: 'https://main--magenta-cascaron-7d14cf.netlify.app',
+//   credentials: true,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// };
+
+// app.use(cors(corsOptions));
+const corsOptionsDelegate = (req, callback) => {
+  const allowedOrigins = ['http://localhost:5173', 'https://main--magenta-cascaron-7d14cf.netlify.app'];
+  let corsOptions;
+  if (allowedOrigins.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { 
+      origin: true, 
+      credentials: true, 
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization']
+    };
+  } else {
+    corsOptions = { origin: false };
+  }
+  callback(null, corsOptions);
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptionsDelegate));
+app.use(express.json());
+
+app.options('*', cors(corsOptionsDelegate));
 
 
 
 app.use(express.json());
-app.options('*', cors(corsOptions));
 app.use(cookieParser());
 
 // imports
