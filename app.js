@@ -26,6 +26,13 @@ app.use(cors(corsOptions));
 //   })
 // );
 // app.use(cors());
+
+app.use(
+  cors({
+    origin: "https://mern-blog-backend-n0da.onrender.com/api/v1",
+    credentials: true, // This should be lowercase
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
