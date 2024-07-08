@@ -4,36 +4,19 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 const allowedOrigins = ["https://main--magenta-cascaron-7d14cf.netlify.app"];
 
-app.options("*", cors());
+const corsOptions = {
+  origin: 'https://main--magenta-cascaron-7d14cf.netlify.app',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 
-// const corsOptions = {
-//   origin: 'https://main--magenta-cascaron-7d14cf.netlify.app',
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-//   credentials: true // This allows cookies to be sent with the request
-// };
-// app.use(cors(corsOptions));
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     credentials: true,
-//   })
-// );
-// app.use(cors());
+app.use(cors(corsOptions));
 
-app.use(
-  cors({
-    origin: "https://mern-blog-backend-n0da.onrender.com/api/v1",
-    credentials: true, // This should be lowercase
-  })
-);
+
+
 app.use(express.json());
+app.options('*', cors(corsOptions));
 app.use(cookieParser());
 
 // imports
