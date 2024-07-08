@@ -6,13 +6,13 @@ const allowedOrigins = ["https://main--magenta-cascaron-7d14cf.netlify.app"];
 
 app.options("*", cors());
 
-const corsOptions = {
-  origin: 'https://main--magenta-cascaron-7d14cf.netlify.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true // This allows cookies to be sent with the request
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: 'https://main--magenta-cascaron-7d14cf.netlify.app',
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   credentials: true // This allows cookies to be sent with the request
+// };
+// app.use(cors(corsOptions));
 // app.use(
 //   cors({
 //     origin: function (origin, callback) {
