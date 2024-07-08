@@ -6,18 +6,23 @@ const allowedOrigins = ["https://main--magenta-cascaron-7d14cf.netlify.app"];
 
 app.options("*", cors());
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: 'https://main--magenta-cascaron-7d14cf.netlify.app',
+  credentials: true // This allows cookies to be sent with the request
+};
+app.use(cors(corsOptions));
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true,
+//   })
+// );
 // app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
