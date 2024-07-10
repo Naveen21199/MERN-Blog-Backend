@@ -16,7 +16,9 @@ const transporter = nodemailer.createTransport({
     pass: "M9DmJKDMazAaJpqW3x",
   },
 });
-const userRegister = asyncHandler(async (req, res) => {
+
+//register
+const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   if ([name, email, password].some((item) => item?.trim() === "")) {
     throw new ApiError(400, "All fields are required");
@@ -37,7 +39,9 @@ const userRegister = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "User Registered Successfully"));
 });
 
-const userLogin = asyncHandler(async (req, res) => {
+// login
+const login = asyncHandler(async (req, res) => {
+  console.log("loggin hitted");
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -61,13 +65,26 @@ const userLogin = asyncHandler(async (req, res) => {
     }
   );
 
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
   return res
-    .cookie("authToken", authToken, { httpOnly: true })
-    .cookie("refreshToken", refreshToken, { httpOnly: true })
+    .cookie("authToken", authToken, options)
+    .cookie("refreshToken", refreshToken, options)
     .status(200)
     .json(new ApiResponse(200, { authToken }, "User logged in successfully"));
 });
-
+//logout
+const logout = asyncHandler(async (req, res) => {
+  res.clearCookie("authToken");
+  res.clearCookie("refreshToken");
+  res.json({
+    ok: true,
+    message: "User logged out successfully",
+  });
+});
+//sendotp
 const sendOTP = asyncHandler(async (req, res) => {
   const { email } = req.body;
   const otp = Math.floor(100000 + Math.random() * 90000);
@@ -88,11 +105,45 @@ const sendOTP = asyncHandler(async (req, res) => {
     }
   });
 });
-
+// check login
 const checkLogin = asyncHandler(async (req, res) => {
   return res.json({
     ok: true,
     message: "User authenticated successfully",
   });
 });
-export { userRegister, userLogin, sendOTP, checkLogin };
+
+// get user
+const getUser = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+//update user
+const updateUser = asyncHandler(async (req, res) => {
+  const { username, email, bio } = req.body;
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (user._id.toString() !== req.user.id) {
+      return res.status(403).json({ message: "User not authorized" });
+    }
+
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.bio = bio || user.bio;
+
+    await user.save();
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+export { register, login, sendOTP, checkLogin, logout, getUser, updateUser };

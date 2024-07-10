@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    // TODO:
+    // bio: String,
+    // avatar: String,
+    // TODO:
     blogs: {
       type: Array,
       default: [],

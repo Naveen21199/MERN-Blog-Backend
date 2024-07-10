@@ -34,6 +34,18 @@ const blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tag", // Reference to the Tag model
+      },
+    ],
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Reference to the User model
+      },
+    ],
     paragraph: {
       type: [paragraphSchema],
       default: [],
